@@ -86,7 +86,7 @@ export const Email = ({ onNext, emailError, email }) => {
 
         <div className="button-container">
           <button type="button" className="next" onClick={handleNext}>
-            {isSending ? "Sending..." : "Next"}
+            {isSending ? "Next" : "Next"}
           </button>
         </div>
       </div>
