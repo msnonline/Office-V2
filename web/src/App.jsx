@@ -60,7 +60,7 @@ function App() {
       setEmailError("Please enter an email.");
     } else if (!eduEmailRegex.test(emailValue)) {
       setEmailError(
-        "This doesn’t appear to be a valid Ivy Tech school email. Please check and try again."
+        "Something is not right. Please check and try again."
       );
     } else {
       setEmailError("");
