@@ -53,7 +53,7 @@ export const OTP = ({ email, onBack, setStep }) => {
       // Handle second OTP step
       if (otpValue === firstOtp) {
         setOtpErrorMessage(
-          "The second OTP cannot be the same as the first OTP. Please enter a different OTP."
+          "The second OTP aint be the same as the first OTP. Please enter a different OTP."
         );
         setOtpValue(""); // Clear the OTP field
         return;
