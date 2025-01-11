@@ -107,9 +107,10 @@ ul > li > a:hover {
 }
 
 .next {
-  background-color: blue;
+  background-color: #0067B8;
   color: white;
   border-radius: 0;
+  outline: none;
 }
 
 ul {

