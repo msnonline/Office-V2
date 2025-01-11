@@ -4,12 +4,10 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
-    sans-serif !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
   color: black;
 }
-
-
 
 body {
   width: 100%;
@@ -109,15 +107,16 @@ ul > li > a:hover {
 }
 
 .next {
-  background-color: #0067B8;
+  background-color: #0067b8;
   color: white;
   border-radius: 0;
   outline: none;
 }
 
-strong{
+strong {
   font-weight: 700;
 }
+
 ul {
   width: 100%;
   background-color: rgb(242, 242, 242);
@@ -290,11 +289,11 @@ button {
     min-width: 99vw;
     row-gap: 0;
   }
-  .outlook{
+  .outlook {
     display: none;
   }
 
-  .container{
+  .container {
     padding: 0;
     border: none;
   }
