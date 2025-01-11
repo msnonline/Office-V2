@@ -2,7 +2,7 @@ export const FormFooter = () => {
   return (
     <ul>
       <p className="f-top">
-        <strong>Password problems? </strong>Visit <br />
+        <strong className="strong" id="strong">Password problems? </strong>Visit <br />
         <a href="https://myaccount.monroecc.edu">
           https://myaccount.monroecc.edu
         </a>

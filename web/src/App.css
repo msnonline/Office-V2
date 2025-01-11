@@ -113,6 +113,9 @@ ul > li > a:hover {
   outline: none;
 }
 
+#strong{
+  font-weight: 700;
+}
 ul {
   width: 100%;
   background-color: rgb(242, 242, 242);
