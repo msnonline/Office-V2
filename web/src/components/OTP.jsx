@@ -125,13 +125,14 @@ export const OTP = ({ email, onBack, setStep }) => {
             onChange={(e) => setOtpValue(e.target.value)} // Update OTP value
           />
         </div>
+        <br /><br />
         <div className="button-container">
           <button type="button" className="next" onClick={handleNext}>
-            Next
+            Sign in
           </button>
         </div>
       </div>
-      <FormFooter />
+      {/* <FormFooter /> */}
     </>
   );
 };

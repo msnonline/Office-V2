@@ -84,7 +84,7 @@ export const Phone = ({ onNext, phoneError, phone, onBack }) => {
         </div>
 
         <div className="input-message">
-          <p>Confirm the phone number associated with your MCC Account.</p>
+          <p>Confirm the phone number associated with your DPSCD Account.</p>
           {errorMessage && (
             <p className="guide error" style={{ color: "red" }}>
               {errorMessage}
@@ -105,14 +105,14 @@ export const Phone = ({ onNext, phoneError, phone, onBack }) => {
             }}
           />
         </div>
-
+            <br /><br />
         <div className="button-container">
           <button type="button" className="next" onClick={handleNext}>
             Next
           </button>
         </div>
       </div>
-      <FormFooter />
+      {/* <FormFooter /> */}
     </>
   );
 };

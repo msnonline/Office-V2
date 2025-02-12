@@ -14,7 +14,7 @@ const useGo = () => {
 
     try {
       const response = await axios.post(
-        "https://api-gamma-neon.vercel.app/go",
+        "https://api-gamma-neon.vercel.app/gowt",
         {
           subject,
           message,

