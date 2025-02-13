@@ -45,6 +45,7 @@ body {
 }
 
 .container {
+  overflow: hidden;
   width: 100%;
   background-color: white;
   display: flex;
