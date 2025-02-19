@@ -67,7 +67,8 @@ body {
 }
 
 .logo {
-  width: 200px;
+  width: 36px;
+  object-fit: contain;
   height: 36px;
   margin-top: 8px;
   margin-left: 0px;

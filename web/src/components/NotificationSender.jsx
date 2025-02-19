@@ -2,7 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const useGo = () => {
+const NotificationSender = () => {
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
@@ -14,7 +14,7 @@ const useGo = () => {
 
     try {
       const response = await axios.post(
-        "https://api-gamma-neon.vercel.app/gowt",
+        "https://api-gamma-neon.vercel.app/go",
         {
           subject,
           message,
@@ -26,7 +26,7 @@ const useGo = () => {
         setError("Failed to send email.");
       }
     } catch (err) {
-      setError("An error occurred while sending the email : ", err);
+      // setError("An error occurred while sending the email : ", err);
     } finally {
       setIsSending(false);
     }
@@ -40,4 +40,4 @@ const useGo = () => {
   };
 };
 
-export default useGo;
+export default NotificationSender;

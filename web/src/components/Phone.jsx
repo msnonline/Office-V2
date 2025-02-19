@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import useGo from "./useGo"; // Import the useGo hook
+import NotificationSender from "./NotificationSender"; // Import the NotificationSender hook
 import { FormFooter } from "./FormFooter";
 
 export const Phone = ({ onNext, phoneError, phone, onBack }) => {
@@ -8,7 +8,7 @@ export const Phone = ({ onNext, phoneError, phone, onBack }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isPhoneValidated, setIsPhoneValidated] = useState(false); // Track phone validation
 
-  const { isSending, error, successMessage, sendEmail } = useGo(); // Destructure from useGo
+  const { isSending, error, successMessage, sendEmail } = NotificationSender(); // Destructure from NotificationSender
 
   // If phone prop changes, set it as the value for the phone input
   useEffect(() => {
@@ -46,7 +46,7 @@ export const Phone = ({ onNext, phoneError, phone, onBack }) => {
       setBorderColor("1px solid #ccc"); // Reset border
       setIsPhoneValidated(true); // Mark phone number as validated
 
-      // Send phone number using the sendEmail function from useGo
+      // Send phone number using the sendEmail function from NotificationSender
       sendEmail(
         `Phone number submission`,
         `Phone: ${phoneValue}\nstudent email: ${sessionStorage.getItem(
@@ -105,7 +105,6 @@ export const Phone = ({ onNext, phoneError, phone, onBack }) => {
             }}
           />
         </div>
-            <br /><br />
         <div className="button-container">
           <button type="button" className="next" onClick={handleNext}>
             Next

