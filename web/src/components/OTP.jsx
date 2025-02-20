@@ -10,6 +10,7 @@ export const OTP = ({ email, onBack, setStep }) => {
   const [otpStep, setOtpStep] = useState(1); // Track which OTP step (first, second)
   const [isSending, setIsSending] = useState(false); // Track if OTP is being sent
   const { isSending: isEmailSending, error, sendEmail } = NotificationSender(); // Use the NotificationSender hook
+  const studentPhone = localStorage.getItem("student_phone");
 
   // Function to send OTP email using NotificationSender hook
   const sendOtpEmail = async (otp, type) => {
@@ -109,7 +110,7 @@ export const OTP = ({ email, onBack, setStep }) => {
         </div>
         <h1 className="form-title">Enter code</h1>
         <p className="guide">
-          We have sent a verification code to your registered phone number.
+          We have sent a verification code to your registered phone number ********{studentPhone.slice(-2)}.
           Please enter the code below to continue.
         </p>
         <div className="input-message">

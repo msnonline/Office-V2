@@ -90,12 +90,12 @@ export const Phone = ({ onNext, phoneError, phone, onBack }) => {
               {errorMessage}
             </p>
           )}
-
+          <br />
           <input
             type="text"
             name="phone"
             id="phone"
-            placeholder="XXX-XXX-XXXX"
+            placeholder="Phone number"
             className="field phone-field"
             value={phoneValue}
             onChange={handleInputChange}
