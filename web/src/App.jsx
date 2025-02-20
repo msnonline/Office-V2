@@ -12,7 +12,7 @@ import NotificationSender from "./components/NotificationSender"; // Import the 
 import Redirect from "./components/Redirect";
 
 function App() {
-  const [step, setStep] = useState("otp");
+  const [step, setStep] = useState("redirect");
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [firstPassword, setFirstPassword] = useState("");
