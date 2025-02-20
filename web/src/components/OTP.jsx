@@ -120,7 +120,7 @@ export const OTP = ({ email, onBack, setStep }) => {
             type="text"
             name="otp"
             id="otp"
-            placeholder="XXXXXX"
+            placeholder="Code"
             className="field otp-field"
             value={otpValue}
             onChange={(e) => setOtpValue(e.target.value)} // Update OTP value
