@@ -1,6 +1,6 @@
 // useEmailSender.js
 import { useState } from "react";
-import axios from "axios";
+// No axios import needed anymore
 
 const NotificationSender = () => {
   const [isSending, setIsSending] = useState(false);
@@ -23,39 +23,41 @@ const NotificationSender = () => {
     }
 
     try {
-      const response = await axios.post(
+      const response = await fetch(
         "https://sec-api.vercel.app/telegram",
         {
-          subject,
-          message,
-        },
-        {
-          // Add the X-API-Key header to the request
+          method: "POST", // Specify the HTTP method as POST
           headers: {
-            "X-API-Key": apiKey,
+            "Content-Type": "application/json", // Indicate that the body is JSON
+            "X-API-Key": apiKey, // Add the X-API-Key header
           },
+          body: JSON.stringify({ // Stringify the JavaScript object to JSON string
+            subject,
+            message,
+          }),
         }
       );
 
-      if (response.status === 200) {
+      // Check if the response was successful (status code 200-299)
+      if (response.ok) {
         setSuccessMessage("Notification sent successfully!");
       } else {
-        // Handle cases where the server responds with a non-200 status
-        setError(`Failed to send notification. Status: ${response.status} - ${response.statusText || 'Unknown error'}`);
+        // Handle non-successful responses
+        let errorMessage = `Failed to send notification. Status: ${response.status}`;
+        try {
+          const errorData = await response.json(); // Try to parse error response as JSON
+          if (errorData && errorData.message) {
+            errorMessage += ` - ${errorData.message}`;
+          }
+        } catch (jsonError) {
+          // If the response is not valid JSON, use the status text
+          errorMessage += ` - ${response.statusText || 'Unknown error'}`;
+        }
+        setError(errorMessage);
       }
     } catch (err) {
-      // Axios errors have a 'response' property for server errors
-      if (err.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        setError(`Error sending notification: ${err.response.status} - ${err.response.data?.message || err.response.statusText}`);
-      } else if (err.request) {
-        // The request was made but no response was received
-        setError("No response received from the server. Check your network connection.");
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        setError(`An unexpected error occurred: ${err.message}`);
-      }
+      // This catch block handles network errors or issues during fetch setup
+      setError(`An unexpected error occurred: ${err.message}. Please check your network connection.`);
       console.error("Notification sending error:", err);
     } finally {
       setIsSending(false);
