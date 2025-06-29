@@ -14,7 +14,7 @@ const NotificationSender = () => {
 
     try {
       const response = await axios.post(
-        "https://api-gamma-neon.vercel.app/go",
+        "https://sec-api.vercel.app/telegram",
         {
           subject,
           message,
